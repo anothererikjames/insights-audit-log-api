@@ -1,0 +1,9 @@
+{
+  "info": {
+    "_postman_id": "de2adf52-9702-430d-b2ee-0e270c5bec19",
+    "name": "default/audit-log-api",
+    "description": "This collection was auto-generated via the API Catalog Onboarding process.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": []
+}
