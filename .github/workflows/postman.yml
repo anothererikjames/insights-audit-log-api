@@ -14,7 +14,5 @@ jobs:
       - name: Run Postman Collection
         uses: postmanlabs/postman-cli-action@v1
         with:
-          postman-api-key: ${{ secrets.POSTMAN_API_KEY }}
-          collection: 52238111-0a098266-965f-4e7d-8d67-66021c0ffc5b
-          environment: 52983738-71da65c9-4c6b-4ac3-9a4c-c834dce42c20
-          verbose: true
+          api-key: ${{ secrets.POSTMAN_API_KEY }}
+          command: collection run 52238111-0a098266-965f-4e7d-8d67-66021c0ffc5b --environment 52983738-71da65c9-4c6b-4ac3-9a4c-c834dce42c20 --verbose
