@@ -1,0 +1,117 @@
+openapi: 3.0.3
+info:
+  title: Audit Log API
+  description: Immutable audit trail for all system events
+  version: "1.0.0"
+  contact:
+    name: Security Team
+    email: security@example.com
+security:
+  - BearerAuth: []
+
+servers:
+  - url: https://audit.api.example.com/v1
+    description: Production
+  - url: https://audit-dev.api.example.com/v1
+    description: Development
+
+paths:
+  /events:
+    get:
+      operationId: listEvents
+      summary: Query audit events
+      tags: [Events]
+      parameters:
+        - name: from
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: to
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: actorId
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Audit events
+
+    post:
+      operationId: recordEvent
+      summary: Record a new audit event
+      tags: [Events]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuditEventInput"
+      responses:
+        "201":
+          description: Event recorded
+
+  /reports/summary:
+    get:
+      operationId: getSummaryReport
+      summary: Get audit summary report
+      tags: [Reports]
+      responses:
+        "200":
+          description: Summary statistics
+
+  /retention/policy:
+    get:
+      operationId: getRetentionPolicy
+      summary: Get current retention policy
+      tags: [Retention]
+      responses:
+        "200":
+          description: Retention policy
+
+    put:
+      operationId: updateRetentionPolicy
+      summary: Update retention policy
+      tags: [Retention]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RetentionPolicy"
+      responses:
+        "200":
+          description: Policy updated
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    AuditEventInput:
+      type: object
+      required: [actorId, action, resource]
+      properties:
+        actorId:
+          type: string
+        action:
+          type: string
+          enum: [create, read, update, delete, login, logout]
+        resource:
+          type: string
+        metadata:
+          type: object
+
+    RetentionPolicy:
+      type: object
+      properties:
+        retentionDays:
+          type: integer
+          minimum: 30
+          maximum: 2555
